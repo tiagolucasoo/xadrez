@@ -12,24 +12,36 @@ namespace xadrez_console
                 PartidaXadrez partida = new PartidaXadrez();
                 while (!partida.terminada)
                 {
-                    Console.Clear();
-                    Tela.imprimirTabuleiro(partida.tab);
+                    try
+                    {
+                        Console.Clear();
+                        Tela.imprimirPartida(partida);
 
-                    Console.WriteLine();
-                    Console.Write("Origem (Ex: C4): ");
-                    Posicao origem = Tela.lerPosicaoXadrez().toPosicao();
+                        Console.WriteLine();
+                        Console.Write("Origem (Ex: C4): ");
+                        Posicao origem = Tela.lerPosicaoXadrez().toPosicao();
 
-                    bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
+                        partida.validarPosicaoDeOrigem(origem);
+                        bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
 
-                    Console.Clear();
-                    Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
+                        Console.Clear();
+                        Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis);
 
-                    Console.WriteLine();
-                    Console.Write("Destino (Ex: C6).: ");
-                    Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
+                        Console.WriteLine();
+                        Console.Write("Destino (Ex: C6).: ");
+                        Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
 
-                    partida.executaMovimento(origem, destino);
+                        partida.validarPosicaoDeDestino(origem, destino);
+                        partida.realizaJogada(origem, destino);
+                    }
+                    catch (TabuleiroException e)
+                    {
+                        Console.WriteLine("Erro. " + e.Message);
+                        Console.ReadLine();
+                    }
                 }
+                Console.Clear();
+                Tela.imprimirPartida(partida);
                 
                 
             }
