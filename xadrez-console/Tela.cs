@@ -13,17 +13,47 @@ namespace xadrez_console
             imprimirPecasCapturadas(partida);
             Console.WriteLine();
             Console.WriteLine("Turno: " + partida.turno);
-            Console.WriteLine("Aguardando a jogada " + partida.jogadorAtual);
+            var jogadorAtualType = partida.jogadorAtual;
+
+            if (jogadorAtualType == Cor.Branca)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            
+            if (!partida.terminada)
+            {
+                Console.WriteLine("Aguardando a jogada " + jogadorAtualType);
+                if (partida.xeque)
+                {
+                    Console.WriteLine("XEQUE");
+                }
+
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.WriteLine("XEQUE-MATE");
+                Console.WriteLine("Vencedor: " + partida.jogadorAtual);
+            }
+
         }
 
         public static void imprimirPecasCapturadas(PartidaXadrez partida)
         {
             Console.WriteLine("Peças Capturadas:");
+
+            
             Console.Write("Brancas: ");
             imprimirConjunto(partida.pecasCapturadas(Cor.Branca));
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Pretas: ");
             imprimirConjunto(partida.pecasCapturadas(Cor.Preta));
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void imprimirConjunto(HashSet<Peca> conjunto)
@@ -83,7 +113,7 @@ namespace xadrez_console
 
         public static PosicaoXadrex lerPosicaoXadrez()
         {
-            string s = Console.ReadLine();
+            string s = Console.ReadLine().ToUpper();
             char coluna = s[0];
             int linha = int.Parse(s[1] + "");
 
